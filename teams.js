@@ -10,7 +10,7 @@ if (!players || !numTeams) {
 
 shuffle(players);
 
-const teams = chunk(players, numTeams);
+const teams = chunk(players, parseInt(numTeams));
 
 let html = "";
 
