@@ -19,7 +19,6 @@ function remove(_i){
     players.splice(_i,1);
     localStorage.setItem("players", JSON.stringify(players));
     renderPlayers();
-
 }
 playerForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -47,7 +46,7 @@ playerList.addEventListener("leave", (e) => {
 });
 
 startBtn.addEventListener("click", () => {
-    const numTeams = prompt("Enter number of players per team:");
+    const numTeams = prompt("كل فرقه كام لعيب ؟");
     if (numTeams) {
         localStorage.setItem("numTeams", numTeams);
         window.location.href = "./teams.html";
