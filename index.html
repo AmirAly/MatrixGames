@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="logo.png" type="image/png" />
+    <title>أبطال ماتريكس</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css">
+    <script src="addtohomescreen.min.js"></script>
+
+  </head>
+  <body>
+    <div class="container">
+    <br/>
+    <br/>
+      <h1>أبطال نادي ماتريكس</h1>
+      <form id="playerForm">
+        <div class="form-group">
+          <label for="playerName">دخل اسم هنا:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="playerName"
+            placeholder="مين ؟"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">ضيف</button>
+        <button type="button" class="btn btn-success" id="startBtn">
+          وزع اللعيبه
+        </button>
+      </form>
+
+      <h2>القايمه:</h2>
+      <ul id="playerList"></ul>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
