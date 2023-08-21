@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://grintame-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -8,7 +8,7 @@ const appSettings = {
 const app = initializeApp(appSettings)
 const database = getDatabase(app)
 const playersInDB = ref(database, "players")
-const teamsInDB = ref(database, "players")
+const teamsInDB = ref(database, "teams")
 
 const inputFieldEl = document.getElementById("input-field")
 const addButtonEl = document.getElementById("add-button")
@@ -19,20 +19,23 @@ let allPlayers = []
 localStorage.clear();
 inputFieldEl.addEventListener("keydown", function (event) {
     if (event.keyCode === 13) {
-        let inputValue = inputFieldEl.value;
-
-        push(playersInDB, { name: inputValue, played: 0, wins: 0 })
-
-        clearInputEl()
+        addPlayer();
     }
 })
-
+function addPlayer() {
+    let inputValue = inputFieldEl.value;
+    const pl = query(playersInDB, orderByChild('name'), equalTo(inputValue));
+    onValue(pl, function (_data) {
+        if (_data.exists()) {
+        }
+        else {
+            push(playersInDB, { name: inputValue, played: 0, wins: 0 })
+        }
+    })
+    clearInputEl();
+}
 addButtonEl.addEventListener("click", function () {
-    let inputValue = inputFieldEl.value
-
-    push(playersInDB, { name: inputValue, played: 0, wins: 0 })
-
-    clearInputEl()
+    addPlayer();
 })
 goButtonEl.addEventListener("click", function () {
     let playersPerTeam = prompt('كام لعيب في كل فريق ؟');
@@ -58,6 +61,7 @@ onValue(playersInDB, function (snapshot) {
             appendItemToShoppingListEl(currentItem);
         }
         totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
+
     } else {
         shoppingListEl.innerHTML = "No items in list... yet"
     }
@@ -71,8 +75,20 @@ function appendItemToShoppingListEl(item) {
     let itemID = item[0]
     let itemValue = item[1]
     let newEl = document.createElement("li")
-
-    newEl.textContent = itemValue.name
+    let score = 0;
+    if (itemValue.played > 0)
+        score = itemValue.wins / itemValue.played;
+    score = score * 100;
+    let stars = 5;
+    if (score < 20)
+        stars = 1;
+    else if (score < 40)
+        stars = 2;
+    else if (score < 60)
+        stars = 3;
+    else if (score < 80)
+        stars = 4;
+    newEl.innerHTML = '<span>' + itemValue.name + '</span>' + '<img class="rating" src="./' + stars + '.png">';
 
     newEl.addEventListener("click", function () {
         newEl.remove();

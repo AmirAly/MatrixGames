@@ -13,9 +13,31 @@ const goButtonEl = document.getElementById("go-button")
 const backButtonEl = document.getElementById("back-button")
 
 const shoppingListEl = document.getElementById("shopping-list")
+const date = new Date();
+const day = date.getDate().toString().padStart(2, '0');
+const month = (date.getMonth() + 1).toString().padStart(2, '0');
+const year = date.getFullYear();
 
-goButtonEl.addEventListener("click", function () {
+const formattedDate = `${day}/${month}/${year}`;
+goButtonEl.addEventListener("click", function (_t) {
     alert('كده تمام .. بعد اللعب افتح اللينك السري واختار الفريق الفايز');
+    let resultsJSON = localStorage.getItem('formation')
+    let results = JSON.parse(resultsJSON);
+
+    if (results) {
+        for (var i = 0; i < results.length; i++) {
+            let t = results[i];
+            console.log(t[0]);
+            let team = {
+                game_date: formattedDate,
+                name: "الفريق " + (i + 1),
+                players: t,
+                win: false
+            }
+            push(teamsInDB, team)
+        }
+    }
+    location.href = "./index.html";
 })
 backButtonEl.addEventListener("click", function () {
     alert('هتعيد !!! .... ماشي . خلي بالك  بيتسجل ان حصل اعادة');
@@ -25,7 +47,6 @@ backButtonEl.addEventListener("click", function () {
 function loadResults() {
     let resultsJSON = localStorage.getItem('formation')
     let results = JSON.parse(resultsJSON);
-    console.log(results);
     if (results) {
         for (var i = 0; i < results.length; i++) {
             appendTeam({ name: "الفريق " + (i + 1) });

@@ -85,6 +85,12 @@ button {
   margin-bottom: 10px;
 }
 
+.rating {
+  height: 20px;
+  width: 100px;
+  float:left;
+}
+
 #go-button {
   background-color: #056e3d;
   padding: 15px;
@@ -138,9 +144,11 @@ ul li {
   border-radius: 8px;
   flex-grow: 1;
   font-size: 20px;
-  text-align: center;
+  text-align: right;
   display: block;
   margin-bottom: 5px;
+  direction: rtl;
+  font-size: 30px;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2)
 }
 
