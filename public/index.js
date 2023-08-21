@@ -52,12 +52,12 @@ onValue(playersInDB, function (snapshot) {
         let itemsArray = Object.entries(snapshot.val())
         allPlayers = [];
         shoppingListEl.innerHTML = ""
-        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length
         for (let i = 0; i < itemsArray.length; i++) {
             let currentItem = itemsArray[i]
             allPlayers.push(currentItem[1]);
-            appendItemToShoppingListEl(currentItem)
+            appendItemToShoppingListEl(currentItem);
         }
+        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
     } else {
         shoppingListEl.innerHTML = "No items in list... yet"
     }
@@ -80,10 +80,8 @@ function appendItemToShoppingListEl(item) {
             if (allPlayers[i].name == newEl.textContent)
                 allPlayers.splice(i, 1);
         }
-        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length
-        console.log(allPlayers);
-
+        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
     })
 
-    shoppingListEl.append(newEl)
+    shoppingListEl.append(newEl);
 }
