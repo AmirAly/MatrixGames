@@ -5,7 +5,6 @@ import { getDatabase, ref, push, update, onValue, remove, query, orderByChild, e
 const appSettings = {
     databaseURL: "https://grintame-default-rtdb.asia-southeast1.firebasedatabase.app/"
 }
-let updated = false;
 const date = new Date();
 const day = date.getDate().toString().padStart(2, '0');
 const month = (date.getMonth() + 1).toString().padStart(2, '0');

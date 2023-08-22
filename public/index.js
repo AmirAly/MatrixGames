@@ -24,6 +24,8 @@ inputFieldEl.addEventListener("keydown", function (event) {
 })
 function addPlayer() {
     let inputValue = inputFieldEl.value;
+    if (inputValue.length < 3)
+        return;
     const pl = query(playersInDB, orderByChild('name'), equalTo(inputValue));
     onValue(pl, function (_data) {
         if (_data.exists()) {

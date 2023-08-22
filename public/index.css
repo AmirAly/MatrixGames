@@ -61,7 +61,12 @@ img {
   width: 150px;
   margin: 0 auto;
 }
-
+#playerPic{
+  width:250px;
+  height:250px;
+  border-radius: 50%;
+  border: 5px solid rgb(161, 157, 157);
+}
 input {
   background-color: #DCE1EB;
   padding: 15px;
@@ -73,7 +78,12 @@ input {
   margin: 10px 0;
   font-family: 'Rubik', sans-serif;
 }
-
+.playerCard{
+  border-radius: 3px;
+  direction: rtl;
+  border: 5px solid rgb(104, 75, 75);
+  padding-right: 10%;
+}
 button {
   background-color: #213d80;
   padding: 15px;
