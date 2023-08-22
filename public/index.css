@@ -5,6 +5,9 @@ body {
   background-color: #EEF0F4;
   font-family: 'Rubik', sans-serif;
   color: #432000;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .container {
