@@ -100,7 +100,7 @@ function appendItemToShoppingListEl(item) {
         }
         totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
     })
-    newEl.addEventListener("drag", function () {
+    newEl.addEventListener("click", function () {
         newEl.remove();
         for (var i = 0; i < allPlayers.length; i++) {
             if (allPlayers[i].name == newEl.textContent)
@@ -110,10 +110,10 @@ function appendItemToShoppingListEl(item) {
     })
 
     newEl.addEventListener('dblclick', function (e) {
-        location.href = "player.html?id=" + itemID
+        //location.href = "player.html?id=" + itemID
     });
     newEl.addEventListener('touchend', function (e) {
-        location.href = "player.html?id=" + itemID
+        //location.href = "player.html?id=" + itemID
     });
 
     shoppingListEl.append(newEl);
