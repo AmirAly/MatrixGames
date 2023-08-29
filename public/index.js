@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, remove, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, update, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://grintame-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -14,6 +14,8 @@ const inputFieldEl = document.getElementById("input-field")
 const addButtonEl = document.getElementById("add-button")
 const goButtonEl = document.getElementById("go-button")
 const shoppingListEl = document.getElementById("shopping-list")
+const inactiveListEl = document.getElementById("inactive-list")
+
 const totalPlayers = document.getElementById("totalPlayers")
 let allPlayers = []
 localStorage.clear();
@@ -31,7 +33,7 @@ function addPlayer() {
         if (_data.exists()) {
         }
         else {
-            push(playersInDB, { name: inputValue, played: 0, wins: 0 })
+            push(playersInDB, { name: inputValue, played: 0, wins: 0, inActive: false })
         }
     })
     clearInputEl();
@@ -47,22 +49,41 @@ goButtonEl.addEventListener("click", function () {
 })
 function randomizeArray(list, size) {
     const randomized = [];
-    while (list.length) {
-        randomized.push(list.splice(0, size).sort(() => Math.random() - 0.5));
+    var active = list.filter(function (obj) {
+        return obj.inActive == false;
+    });
+    while (active.length) {
+        randomized.push(active.splice(0, size).sort(() => Math.random() - 0.5));
     }
     return randomized;
 }
 onValue(playersInDB, function (snapshot) {
     if (snapshot.exists()) {
         let itemsArray = Object.entries(snapshot.val())
+        itemsArray.sort(function (a, b) {
+            let aScore = a[1].wins / a[1].played;
+            let bScore = b[1].wins / b[1].played;
+            if (isNaN(aScore))
+                aScore = 0;
+            if (isNaN(bScore))
+                bScore = 0;
+            if (aScore > bScore)
+                return -1;
+            else
+                return 1;
+        })
         allPlayers = [];
-        shoppingListEl.innerHTML = ""
+        shoppingListEl.innerHTML = "";
+        inactiveListEl.innerHTML = "";
+        let totalCount = 0;
         for (let i = 0; i < itemsArray.length; i++) {
             let currentItem = itemsArray[i]
             allPlayers.push(currentItem[1]);
+            if (currentItem[1].inActive == false)
+                totalCount += 1;
             appendItemToShoppingListEl(currentItem);
         }
-        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
+        totalPlayers.innerHTML = "عدد نجوم القايمه : " + totalCount;
 
     } else {
         shoppingListEl.innerHTML = "No items in list... yet"
@@ -91,30 +112,17 @@ function appendItemToShoppingListEl(item) {
     else if (score < 80)
         stars = 4;
     newEl.innerHTML = '<span>' + itemValue.name + '</span>' + '<img class="rating" src="./' + stars + '.png">';
-
-    newEl.addEventListener("touchmove", function () {
-        newEl.remove();
-        for (var i = 0; i < allPlayers.length; i++) {
-            if (allPlayers[i].name == newEl.textContent)
-                allPlayers.splice(i, 1);
-        }
-        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
-    })
     newEl.addEventListener("click", function () {
-        newEl.remove();
-        for (var i = 0; i < allPlayers.length; i++) {
-            if (allPlayers[i].name == newEl.textContent)
-                allPlayers.splice(i, 1);
-        }
-        totalPlayers.innerHTML = "عدد النجوم : " + allPlayers.length;
-    })
-
-    newEl.addEventListener('dblclick', function (e) {
-        //location.href = "player.html?id=" + itemID
+        itemValue.inActive = !itemValue.inActive;
+        const updates = {};
+        updates['/players/-' + itemID.substring(1)] = itemValue;
+        update(ref(database), updates)
     });
-    newEl.addEventListener('touchend', function (e) {
-        //location.href = "player.html?id=" + itemID
-    });
-
-    shoppingListEl.append(newEl);
+    if (itemValue.inActive == false) {
+        shoppingListEl.append(newEl);
+    }
+    else {
+        newEl.classList.add('in-active');
+        inactiveListEl.append(newEl);
+    }
 }
