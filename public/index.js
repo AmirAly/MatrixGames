@@ -42,19 +42,40 @@ addButtonEl.addEventListener("click", function () {
     addPlayer();
 })
 goButtonEl.addEventListener("click", function () {
-    let playersPerTeam = prompt('كام لعيب في كل فريق ؟');
-    let SortedPlayers = randomizeArray(allPlayers, playersPerTeam);
+    let SortedPlayers = randomizeArray(allPlayers);
     localStorage.setItem("formation", JSON.stringify(SortedPlayers))
     location.href = './result.html'
 })
-function randomizeArray(list, size) {
+function randomizeArray(list) {
+    let arr1 = [];
+    let arr2 = [];
+    let arr3 = [];
     const randomized = [];
     var active = list.filter(function (obj) {
         return obj.inActive == false;
     });
+    let playersPerteam = 5;
+    if (active.length > 15)
+        playersPerteam = 6;
+    else if (active.length > 18)
+        playersPerteam = 7;
+    console.log(playersPerteam);
+    let topPlayers = active.splice(0, 3);
     while (active.length) {
-        randomized.push(active.splice(0, size).sort(() => Math.random() - 0.5));
+        active.sort(() => Math.random() - 0.5);
+        if (arr1.length < playersPerteam - 1)
+            arr1 = arr1.concat(active.splice(0, 1))
+        else if (arr2.length < playersPerteam - 1)
+            arr2 = arr2.concat(active.splice(0, 1))
+        else
+            arr3 = arr3.concat(active.splice(0, 1))
     }
+    arr1.push(topPlayers[0]);
+    arr2.push(topPlayers[1]);
+    arr3.push(topPlayers[2]);
+    randomized.push(arr1);
+    randomized.push(arr2);
+    randomized.push(arr3);
     return randomized;
 }
 onValue(playersInDB, function (snapshot) {
@@ -89,11 +110,9 @@ onValue(playersInDB, function (snapshot) {
         shoppingListEl.innerHTML = "No items in list... yet"
     }
 })
-
 function clearInputEl() {
     inputFieldEl.value = ""
 }
-
 function appendItemToShoppingListEl(item) {
     let itemID = item[0]
     let itemValue = item[1]
